@@ -45,7 +45,7 @@ export function GetStartedTab(props: IGetStartedTabProps) {
         <Card title={title} space={8} mb={24}>
           <Description style={{ color: colors.B60 }}>{description}</Description>
         </Card>
-        <Timeline steps={steps} />
+        <Timeline steps={steps} expandSteps={false} />
       </Grid.Col>
 
       <Grid.Col span={8}>
