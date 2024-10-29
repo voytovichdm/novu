@@ -6,7 +6,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../primitives/tabs';
 import { WorkflowCanvas } from './workflow-canvas';
 import { workflowSchema } from './schema';
 import { buildRoute, ROUTES } from '@/utils/routes';
-import { ConfigureWorkflow } from './configure-workflow';
 
 export const WorkflowEditor = () => {
   const { environmentId = '', workflowId = '' } = useParams<{ environmentId: string; workflowId: string }>();
@@ -45,7 +44,6 @@ export const WorkflowEditor = () => {
           {steps && <WorkflowCanvas steps={steps} />}
         </TabsContent>
       </Tabs>
-      <ConfigureWorkflow />
     </div>
   );
 };
