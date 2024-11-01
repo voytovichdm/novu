@@ -214,7 +214,7 @@ We are more than happy to help you. If you are getting any errors or facing prob
 
 ## 🛡️ License
 
-Novu is a commercial open source company, which means some parts of this open source repository require a commercial license. The concept is called "Open Core" where the core technology is fully open source, licensed under MIT license and the enterprise licnesed code is covered under a commercial license ("/enterprise" Enterprise Edition). Enterprise features are built by the core engineering team of Novu which is hired in full-time.
+Novu is a commercial open source company, which means some parts of this open source repository require a commercial license. The concept is called "Open Core," where the core technology is fully open source, licensed under MIT license, and the enterprise code is covered under a commercial license ("/enterprise" Enterprise Edition). Enterprise features are built by the core engineering team of Novu which is hired in full-time.
 
 The following modules and folders are licensed under the enterprise license:
 - `enterprise` folder at the root of the project and all of their subfolders and modules
