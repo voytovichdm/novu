@@ -21,12 +21,12 @@ import {
   GetListQueryParams,
   IdentifierOrInternalId,
   ListWorkflowResponse,
-  PromoteWorkflowDto,
   StepDataDto,
   UpdateWorkflowDto,
   UserSessionData,
   WorkflowResponseDto,
   WorkflowTestDataResponseDto,
+  SyncWorkflowDto,
 } from '@novu/shared';
 import { ExternalApiAccessible, UserAuthGuard, UserSession } from '@novu/application-generic';
 import { ApiCommonResponses } from '../shared/framework/response.decorator';
@@ -81,17 +81,17 @@ export class WorkflowController {
     );
   }
 
-  @Put(':workflowId/promote')
+  @Put(':workflowId/sync')
   @UseGuards(UserAuthGuard)
-  async promote(
+  async sync(
     @UserSession() user: UserSessionData,
     @Param('workflowId', ParseSlugIdPipe) workflowId: IdentifierOrInternalId,
-    @Body() promoteWorkflowDto: PromoteWorkflowDto
+    @Body() syncWorkflowDto: SyncWorkflowDto
   ): Promise<WorkflowResponseDto> {
     return this.syncToEnvironmentUseCase.execute(
       SyncToEnvironmentCommand.create({
         identifierOrInternalId: workflowId,
-        targetEnvironmentId: promoteWorkflowDto.targetEnvironmentId,
+        targetEnvironmentId: syncWorkflowDto.targetEnvironmentId,
         user,
       })
     );
@@ -117,9 +117,18 @@ export class WorkflowController {
   @UseGuards(UserAuthGuard)
   async getWorkflow(
     @UserSession(ParseSlugEnvironmentIdPipe) user: UserSessionData,
-    @Param('workflowId', ParseSlugIdPipe) workflowId: IdentifierOrInternalId
+    @Param('workflowId', ParseSlugIdPipe) workflowId: IdentifierOrInternalId,
+    @Query('environmentId') environmentId?: string
   ): Promise<WorkflowResponseDto> {
-    return this.getWorkflowUseCase.execute(GetWorkflowCommand.create({ identifierOrInternalId: workflowId, user }));
+    return this.getWorkflowUseCase.execute(
+      GetWorkflowCommand.create({
+        identifierOrInternalId: workflowId,
+        user: {
+          ...user,
+          environmentId: environmentId || user.environmentId,
+        },
+      })
+    );
   }
 
   @Delete(':workflowId')
