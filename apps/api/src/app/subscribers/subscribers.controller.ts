@@ -15,7 +15,6 @@ import {
   Res,
 } from '@nestjs/common';
 import {
-  ApiQuery,
   CreateSubscriber,
   CreateSubscriberCommand,
   OAuthHandlerEnum,
@@ -24,7 +23,7 @@ import {
   UpdateSubscriberChannelCommand,
   UpdateSubscriberCommand,
 } from '@novu/application-generic';
-import { ApiExcludeEndpoint, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiExcludeEndpoint, ApiOperation, ApiParam, ApiTags, ApiQuery } from '@nestjs/swagger';
 import {
   ApiRateLimitCategoryEnum,
   ApiRateLimitCostEnum,
