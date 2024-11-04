@@ -15,6 +15,7 @@ import {
   Res,
 } from '@nestjs/common';
 import {
+  ApiQuery,
   CreateSubscriber,
   CreateSubscriberCommand,
   OAuthHandlerEnum,
@@ -161,6 +162,12 @@ export class SubscribersController {
   @ApiOperation({
     summary: 'Get subscriber',
     description: 'Get subscriber by your internal id used to identify the subscriber',
+  })
+  @ApiQuery({
+    name: 'includeTopics',
+    type: String,
+    description: 'Includes the topics associated with the subscriber',
+    required: false,
   })
   async getSubscriber(
     @UserSession() user: UserSessionData,
