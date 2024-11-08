@@ -12,7 +12,6 @@ type SubscriberQuery = FilterQuery<SubscriberDBModel> & EnforceEnvOrOrgIds;
 export class SubscriberRepository extends BaseRepository<SubscriberDBModel, SubscriberEntity, EnforceEnvOrOrgIds> {
   constructor() {
     super(Subscriber, SubscriberEntity);
-    this.subscriber = Subscriber;
   }
 
   async findBySubscriberId(
@@ -153,7 +152,7 @@ export class SubscriberRepository extends BaseRepository<SubscriberDBModel, Subs
   }
 
   async estimatedDocumentCount(): Promise<number> {
-    return this.subscriber.estimatedDocumentCount();
+    return this._model.estimatedDocumentCount();
   }
 }
 
