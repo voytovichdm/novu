@@ -40,7 +40,7 @@ export const usageLimitsWorkflow = workflow(
   {
     name: 'Usage Limits Alert',
     payloadSchema: z.object({
-      percentage: z.number().min(0).max(100),
+      percentage: z.number().min(0),
       organizationName: z.string(),
     }),
   }
