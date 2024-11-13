@@ -116,7 +116,7 @@ export class ValidateAndPersistWorkflowIssuesUsecase {
     if (step.template?.controls) {
       const { issuesMissingValues } = this.buildDefaultControlValuesUsecase.execute({
         controlSchema: step.template?.controls,
-        controlValues: stepIdToControlValuesMap,
+        controlValues: stepIdToControlValuesMap[step._templateId].controls,
       });
       // eslint-disable-next-line no-param-reassign
       stepIssues.controls = issuesMissingValues;
@@ -194,6 +194,8 @@ export class ValidateAndPersistWorkflowIssuesUsecase {
     for (const step of workflow.steps) {
       if (stepIssuesMap[step._templateId]) {
         step.issues = stepIssuesMap[step._templateId];
+      } else {
+        step.issues = undefined;
       }
     }
 
