@@ -4,11 +4,6 @@ name: Deploy DEV WEBHOOK
 # events but only for the master branch
 on:
   workflow_dispatch:
-    inputs:
-      skipTests:
-        type: boolean
-        description: Skip tests
-        default: false
   push:
     branches:
       - next
@@ -26,7 +21,6 @@ env:
 
 jobs:
   test_webhook:
-    if: inputs.skipTests == 'false'
     uses: ./.github/workflows/reusable-webhook-e2e.yml
     secrets: inherit
 
