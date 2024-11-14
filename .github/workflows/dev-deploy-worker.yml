@@ -4,6 +4,11 @@ name: Deploy DEV Worker
 # events but only for the master branch
 on:
   workflow_dispatch:
+    inputs:
+      skipTests:
+        type: boolean
+        description: Skip tests
+        default: false
   push:
     branches:
       - next
@@ -25,6 +30,7 @@ env:
 
 jobs:
   test_worker:
+    if: inputs.skipTests == 'false'
     uses: ./.github/workflows/reusable-worker-e2e.yml
     with:
       ee: true
