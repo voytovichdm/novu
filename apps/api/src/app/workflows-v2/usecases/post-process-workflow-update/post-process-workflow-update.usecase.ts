@@ -16,6 +16,8 @@ import { Injectable } from '@nestjs/common';
 import { PostProcessWorkflowUpdateCommand } from './post-process-workflow-update.command';
 import { OverloadContentDataOnWorkflowUseCase } from '../overload-content-data';
 
+const MAX_NUMBER_OF_TAGS = 16;
+
 @Injectable()
 export class PostProcessWorkflowUpdate {
   constructor(
@@ -202,11 +204,11 @@ export class PostProcessWorkflowUpdate {
       tagsIssues.push({ issueType: WorkflowIssueTypeEnum.MISSING_VALUE, message: 'Empty tag value' });
     }
 
-    const exceedsMaxLength = tags?.some((tag) => tag.length > 8);
+    const exceedsMaxLength = tags?.some((tag) => tag.length > MAX_NUMBER_OF_TAGS);
     if (exceedsMaxLength) {
       tagsIssues.push({
         issueType: WorkflowIssueTypeEnum.LIMIT_REACHED,
-        message: 'Exceeded the 8 tag limit',
+        message: `Exceeded the ${MAX_NUMBER_OF_TAGS} tag limit`,
       });
     }
 
