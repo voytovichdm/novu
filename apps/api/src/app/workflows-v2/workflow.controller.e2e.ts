@@ -30,6 +30,7 @@ import {
   WorkflowResponseDto,
   WorkflowStatusEnum,
 } from '@novu/shared';
+import { PreferencesRepository } from '@novu/dal';
 import { after } from 'mocha';
 import { sleep } from '@nestjs/terminus/dist/utils';
 import { encodeBase62 } from '../shared/helpers';
@@ -1081,6 +1082,16 @@ async function getWorkflowRest(workflowId: string): Promise<WorkflowResponseDto>
 
 async function validateWorkflowDeleted(workflowId: string): Promise<void> {
   await session.testAgent.get(`${v2Prefix}/workflows/${workflowId}`).expect(404);
+  await validatePreferencesDeleted(workflowId);
+}
+
+async function validatePreferencesDeleted(workflowId: string): Promise<void> {
+  const preferencesRepository = new PreferencesRepository();
+  const preferences = await preferencesRepository.find({
+    _templateId: workflowId,
+    _organizationId: session.organization._id,
+  });
+  expect(preferences.length).to.equal(0);
 }
 
 async function getWorkflowAndValidate(workflowCreated: WorkflowResponseDto) {
