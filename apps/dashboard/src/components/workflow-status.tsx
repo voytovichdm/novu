@@ -1,8 +1,8 @@
+import { ComponentProps } from 'react';
+import { RiCheckboxCircleFill, RiErrorWarningFill, RiForbidFill } from 'react-icons/ri';
 import { Badge } from '@/components/primitives/badge';
 import { WorkflowStatusEnum } from '@/utils/enums';
-import { ComponentProps } from 'react';
-import { IconType } from 'react-icons/lib';
-import { RiAlertFill, RiCheckboxCircleFill, RiErrorWarningFill } from 'react-icons/ri';
+import { type IconType } from 'react-icons/lib';
 
 type WorkflowStatusProps = {
   status: WorkflowStatusEnum;
@@ -16,8 +16,16 @@ const statusRenderData: Record<
     icon: IconType;
   }
 > = {
-  [WorkflowStatusEnum.ACTIVE]: { badgeVariant: 'success', text: 'Active', icon: RiCheckboxCircleFill },
-  [WorkflowStatusEnum.INACTIVE]: { badgeVariant: 'warning', text: 'Inactive', icon: RiAlertFill },
+  [WorkflowStatusEnum.ACTIVE]: {
+    badgeVariant: 'success',
+    text: 'Active',
+    icon: RiCheckboxCircleFill,
+  },
+  [WorkflowStatusEnum.INACTIVE]: {
+    badgeVariant: 'soft',
+    text: 'Inactive',
+    icon: RiForbidFill,
+  },
   [WorkflowStatusEnum.ERROR]: {
     badgeVariant: 'destructive',
     text: 'Action required',
@@ -32,7 +40,7 @@ export const WorkflowStatus = (props: WorkflowStatusProps) => {
   const text = statusRenderData[status].text;
 
   return (
-    <Badge variant={badgeVariant}>
+    <Badge variant={badgeVariant} className="border-none">
       <Icon className="size-4" /> {text}
     </Badge>
   );
