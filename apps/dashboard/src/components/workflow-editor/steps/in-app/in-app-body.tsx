@@ -1,6 +1,6 @@
-import { useMemo } from 'react';
 import { liquid } from '@codemirror/lang-liquid';
 import { EditorView } from '@uiw/react-codemirror';
+import { useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { Editor } from '@/components/primitives/editor';
@@ -27,10 +27,10 @@ export const InAppBody = () => {
       render={({ field }) => (
         <FormItem className="w-full">
           <FormControl>
-            <InputField size="md" className="h-32 px-1" state={errors[bodyKey] ? 'error' : 'default'}>
+            <InputField className="h-36 px-1" state={errors[bodyKey] ? 'error' : 'default'}>
               <Editor
+                fontFamily="inherit"
                 placeholder={capitalize(field.name)}
-                size="md"
                 id={field.name}
                 extensions={[
                   liquid({
@@ -45,7 +45,7 @@ export const InAppBody = () => {
               />
             </InputField>
           </FormControl>
-          <FormMessage />
+          <FormMessage>{`This supports markdown and variables, type {{ for more.`}</FormMessage>
         </FormItem>
       )}
     />
