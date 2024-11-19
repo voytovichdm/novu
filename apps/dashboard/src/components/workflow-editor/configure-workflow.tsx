@@ -126,7 +126,7 @@ export function ConfigureWorkflow() {
             defaultValue=""
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Workflow Name</FormLabel>
+                <FormLabel>Name</FormLabel>
                 <FormControl>
                   <InputField>
                     <Input
@@ -148,7 +148,7 @@ export function ConfigureWorkflow() {
             defaultValue=""
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Workflow Identifier</FormLabel>
+                <FormLabel>Identifier</FormLabel>
                 <FormControl>
                   <InputField className="flex overflow-hidden pr-0">
                     <Input placeholder="Untitled" className="cursor-default" {...field} readOnly />
