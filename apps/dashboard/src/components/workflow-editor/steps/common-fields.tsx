@@ -39,7 +39,7 @@ export function CommonFields() {
         name={`steps.${stepIndex}.name`}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Step Name</FormLabel>
+            <FormLabel>Name</FormLabel>
             <FormControl>
               <InputField>
                 <Input
@@ -60,7 +60,7 @@ export function CommonFields() {
         name={`steps.${stepIndex}.stepId`}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Step Identifier</FormLabel>
+            <FormLabel>Identifier</FormLabel>
             <FormControl>
               <InputField className="flex overflow-hidden pr-0">
                 <Input placeholder="Untitled" className="cursor-default" {...field} readOnly />
