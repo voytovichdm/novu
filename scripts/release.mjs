@@ -12,7 +12,6 @@ import * as yargs from 'yargs';
       alias: 'd',
       description: 'Whether or not to perform a dry-run of the release process, defaults to true',
       type: 'boolean',
-      default: true,
     })
     .option('verbose', {
       description: 'Whether or not to enable verbose logging, defaults to false',
