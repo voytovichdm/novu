@@ -1,9 +1,10 @@
-import { releaseChangelog, releasePublish, releaseVersion } from 'nx/release';
-import * as yargs from 'yargs';
+import { releaseChangelog, releasePublish, releaseVersion } from 'nx/release/index.js';
+import yargs from 'yargs/yargs';
+import { hideBin } from 'yargs/helpers';
 
 (async () => {
-  const options = await yargs
-    .version(false) // don't use the default meaning of version in yargs
+  const options = yargs(hideBin(process.argv))
+    .version(false)
     .option('version', {
       description: 'Explicit version specifier to use, if overriding conventional commits',
       type: 'string',
@@ -18,7 +19,7 @@ import * as yargs from 'yargs';
       type: 'boolean',
       default: false,
     })
-    .parseAsync();
+    .parse();
 
   const { workspaceVersion, projectsVersionData } = await releaseVersion({
     specifier: options.version,
