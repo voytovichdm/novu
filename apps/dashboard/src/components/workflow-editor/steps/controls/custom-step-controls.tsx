@@ -16,7 +16,7 @@ export function CustomStepControls({
 }) {
   const [isEditorOpen, setIsEditorOpen] = useState(true);
 
-  if (!dataSchema || origin !== WorkflowOriginEnum.EXTERNAL) {
+  if (!dataSchema?.properties || origin !== WorkflowOriginEnum.EXTERNAL) {
     return null;
   }
 
@@ -42,7 +42,7 @@ export function CustomStepControls({
 
         <CollapsibleContent>
           <div className="bg-background rounded-md border border-dashed px-3 py-0">
-            <JsonForm schema={(dataSchema as RJSFSchema) || {}} variables={[]} />
+            <JsonForm schema={(dataSchema as RJSFSchema) || {}} />
           </div>
         </CollapsibleContent>
       </Collapsible>
