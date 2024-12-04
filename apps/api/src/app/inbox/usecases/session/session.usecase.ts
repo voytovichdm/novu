@@ -111,7 +111,9 @@ export class Session {
           _environmentId: environment._id,
         },
         {
-          connected: true,
+          $set: {
+            connected: true,
+          },
         }
       );
     }
