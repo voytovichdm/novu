@@ -23,7 +23,7 @@ import { TagInput } from '../primitives/tag-input';
 import { Textarea } from '../primitives/textarea';
 import { MAX_DESCRIPTION_LENGTH, workflowSchema } from '@/components/workflow-editor/schema';
 import { useFormAutosave } from '@/hooks/use-form-autosave';
-import { RiDeleteBin2Line, RiGitPullRequestFill, RiMore2Fill } from 'react-icons/ri';
+import { RiCodeSSlashLine, RiDeleteBin2Line, RiGitPullRequestFill, RiMore2Fill } from 'react-icons/ri';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -41,6 +41,8 @@ import { showToast } from '@/components/primitives/sonner-helpers';
 import { ToastIcon } from '@/components/primitives/sonner';
 import { DeleteWorkflowDialog } from '../delete-workflow-dialog';
 import { ROUTES } from '@/utils/routes';
+import { TelemetryEvent } from '../../utils/telemetry';
+import { usePromotionalBanner } from '../promotional/coming-soon-banner';
 
 type ConfigureWorkflowFormProps = {
   workflow: WorkflowResponseDto;
@@ -64,6 +66,15 @@ export const ConfigureWorkflowForm = (props: ConfigureWorkflowFormProps) => {
   const tagsQuery = useTags();
   const { currentEnvironment } = useEnvironment();
   const { safeSync, isSyncable, tooltipContent, PromoteConfirmModal } = useSyncWorkflow(workflow);
+  const { show: showComingSoonBanner } = usePromotionalBanner({
+    content: {
+      title: '🚧 Export to Code is on the way!',
+      description:
+        'With Export to Code, you can design workflows in the GUI and switch to code anytime you need more control and flexibility.',
+      feedbackQuestion: "Sounds like a feature you'd need?",
+      telemetryEvent: TelemetryEvent.EXPORT_TO_CODE_BANNER_REACTION,
+    },
+  });
 
   const { deleteWorkflow, isPending: isDeleteWorkflowPending } = useDeleteWorkflow({
     onSuccess: () => {
@@ -125,6 +136,11 @@ export const ConfigureWorkflowForm = (props: ConfigureWorkflowFormProps) => {
     saveForm();
   };
 
+  function handleExportToCode() {
+    showComingSoonBanner();
+    setIsDropdownOpen(false);
+  }
+
   const syncToLabel = `Sync to ${currentEnvironment?.name === 'Production' ? 'Development' : 'Production'}`;
 
   return (
@@ -168,6 +184,10 @@ export const ConfigureWorkflowForm = (props: ConfigureWorkflowFormProps) => {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
               <DropdownMenuGroup>
+                <DropdownMenuItem onClick={handleExportToCode}>
+                  <RiCodeSSlashLine />
+                  Export to Code
+                </DropdownMenuItem>
                 {isSyncable ? (
                   <DropdownMenuItem onClick={safeSync}>
                     <RiGitPullRequestFill />
