@@ -162,7 +162,7 @@ export const ConfigureWorkflowForm = (props: ConfigureWorkflowFormProps) => {
           </div>
           <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="ml-auto">
+              <Button variant="ghost" size="icon" className="ml-auto h-[20px] w-[22px]">
                 <RiMore2Fill />
               </Button>
             </DropdownMenuTrigger>
