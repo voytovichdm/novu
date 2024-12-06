@@ -184,10 +184,12 @@ export const ConfigureWorkflowForm = (props: ConfigureWorkflowFormProps) => {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
               <DropdownMenuGroup>
-                <DropdownMenuItem onClick={handleExportToCode}>
-                  <RiCodeSSlashLine />
-                  Export to Code
-                </DropdownMenuItem>
+                {isSyncable && (
+                  <DropdownMenuItem onClick={handleExportToCode}>
+                    <RiCodeSSlashLine />
+                    Export to Code
+                  </DropdownMenuItem>
+                )}
                 {isSyncable ? (
                   <DropdownMenuItem onClick={safeSync}>
                     <RiGitPullRequestFill />
