@@ -70,6 +70,10 @@ export function ActivityFilters({ onFiltersChange, initialValues, onReset }: Act
     return () => subscription.unsubscribe();
   }, [form, onFiltersChange]);
 
+  useEffect(() => {
+    form.reset(initialValues);
+  }, [form, initialValues]);
+
   const handleReset = () => {
     form.reset(defaultActivityFilters);
     onFiltersChange(defaultActivityFilters);
