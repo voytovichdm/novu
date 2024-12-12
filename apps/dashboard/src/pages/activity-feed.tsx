@@ -23,8 +23,8 @@ export function ActivityFeed() {
   const handleFiltersChange = useDebounce(handleFiltersChangeRaw, 500);
 
   const hasActiveFilters = Object.entries(filters).some(([key, value]) => {
-    // Ignore endDate as it's always present
-    if (key === 'endDate') return false;
+    // Ignore dateRange as it's always present
+    if (key === 'dateRange') return false;
 
     // For arrays, check if they have any items
     if (Array.isArray(value)) return value.length > 0;
