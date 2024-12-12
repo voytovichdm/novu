@@ -1,7 +1,7 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/primitives/table';
 import { format } from 'date-fns';
 import { cn } from '@/utils/ui';
-import { IActivity, ISubscriber } from '@novu/shared';
+import { ISubscriber } from '@novu/shared';
 import { TimeDisplayHoverCard } from '@/components/time-display-hover-card';
 import { createSearchParams, useLocation, useSearchParams, useNavigate } from 'react-router-dom';
 import { StatusBadge } from './components/status-badge';
@@ -17,7 +17,7 @@ import { Skeleton } from '@/components/primitives/skeleton';
 
 export interface ActivityTableProps {
   selectedActivityId: string | null;
-  onActivitySelect: (activity: IActivity) => void;
+  onActivitySelect: (activityItemId: string) => void;
   filters?: ActivityFilters;
   hasActiveFilters: boolean;
   onClearFilters: () => void;
@@ -104,7 +104,7 @@ export function ActivityTable({
                     selectedActivityId === activity._id &&
                       'bg-neutral-50 after:absolute after:right-0 after:top-0 after:h-[calc(100%-1px)] after:w-[5px] after:bg-neutral-200'
                   )}
-                  onClick={() => onActivitySelect(activity)}
+                  onClick={() => onActivitySelect(activity._id)}
                 >
                   <TableCell className="px-3">
                     <div className="flex flex-col">

@@ -6,21 +6,9 @@ import { ActivityPanel } from '@/components/activity/activity-panel';
 import { Badge } from '../components/primitives/badge';
 import { PageMeta } from '../components/page-meta';
 import { useActivityUrlState } from '@/hooks/use-activity-url-state';
-import { useDebounce } from '@/hooks/use-debounce';
-import { useSearchParams } from 'react-router-dom';
 
 export function ActivityFeed() {
-  const [_, setSearchParams] = useSearchParams();
-
-  const {
-    activityItemId,
-    filters,
-    filterValues,
-    handleActivitySelect,
-    handleFiltersChange: handleFiltersChangeRaw,
-  } = useActivityUrlState();
-
-  const handleFiltersChange = useDebounce(handleFiltersChangeRaw, 500);
+  const { activityItemId, filters, filterValues, handleActivitySelect, handleFiltersChange } = useActivityUrlState();
 
   const hasActiveFilters = Object.entries(filters).some(([key, value]) => {
     // Ignore dateRange as it's always present
@@ -34,17 +22,6 @@ export function ActivityFeed() {
 
   const handleClearFilters = () => {
     handleFiltersChange(defaultActivityFilters);
-  };
-
-  const handleActivityPanelSelect = (activityId: string) => {
-    setSearchParams(
-      (prev) => {
-        prev.set('activityItemId', activityId);
-
-        return prev;
-      },
-      { replace: true }
-    );
   };
 
   return (
@@ -95,7 +72,7 @@ export function ActivityFeed() {
                 }}
                 className="bg-background h-full w-[35%] overflow-auto border-l"
               >
-                <ActivityPanel activityId={activityItemId} onActivitySelect={handleActivityPanelSelect} />
+                <ActivityPanel activityId={activityItemId} onActivitySelect={handleActivitySelect} />
               </motion.div>
             )}
           </AnimatePresence>

@@ -1,6 +1,6 @@
 import { useSearchParams } from 'react-router-dom';
 import { useCallback, useMemo } from 'react';
-import { IActivity, ChannelTypeEnum } from '@novu/shared';
+import { ChannelTypeEnum } from '@novu/shared';
 import { ActivityFilters } from '@/api/activity';
 import { ActivityFiltersData, ActivityUrlState } from '@/types/activity';
 
@@ -46,51 +46,54 @@ function parseFilterValues(searchParams: URLSearchParams): ActivityFiltersData {
 }
 
 export function useActivityUrlState(): ActivityUrlState & {
-  handleActivitySelect: (activity: IActivity) => void;
+  handleActivitySelect: (activityItemId: string) => void;
   handleFiltersChange: (data: ActivityFiltersData) => void;
 } {
   const [searchParams, setSearchParams] = useSearchParams();
   const activityItemId = searchParams.get('activityItemId');
 
   const handleActivitySelect = useCallback(
-    (activity: IActivity) => {
-      setSearchParams((prev) => {
-        if (activity._id === activityItemId) {
-          prev.delete('activityItemId');
-        } else {
-          prev.set('activityItemId', activity._id);
-        }
-        return prev;
-      });
+    (newActivityItemId: string) => {
+      const newParams = new URLSearchParams(searchParams);
+      if (newActivityItemId === activityItemId) {
+        newParams.delete('activityItemId');
+      } else {
+        newParams.set('activityItemId', newActivityItemId);
+      }
+      setSearchParams(newParams, { replace: true });
     },
-    [activityItemId, setSearchParams]
+    [activityItemId, searchParams, setSearchParams]
   );
 
   const handleFiltersChange = useCallback(
     (data: ActivityFiltersData) => {
-      setSearchParams((prev) => {
-        ['channels', 'workflows', 'transactionId', 'subscriberId', 'dateRange'].forEach((key) => prev.delete(key));
+      const newParams = new URLSearchParams();
 
-        if (data.channels?.length) {
-          prev.set('channels', data.channels.join(','));
-        }
-        if (data.workflows?.length) {
-          prev.set('workflows', data.workflows.join(','));
-        }
-        if (data.transactionId) {
-          prev.set('transactionId', data.transactionId);
-        }
-        if (data.subscriberId) {
-          prev.set('subscriberId', data.subscriberId);
-        }
-        if (data.dateRange && data.dateRange !== DEFAULT_DATE_RANGE) {
-          prev.set('dateRange', data.dateRange);
-        }
+      // First, preserve the activity selection if it exists
+      if (activityItemId) {
+        newParams.set('activityItemId', activityItemId);
+      }
 
-        return prev;
-      });
+      // Then set the filter values
+      if (data.channels?.length) {
+        newParams.set('channels', data.channels.join(','));
+      }
+      if (data.workflows?.length) {
+        newParams.set('workflows', data.workflows.join(','));
+      }
+      if (data.transactionId) {
+        newParams.set('transactionId', data.transactionId);
+      }
+      if (data.subscriberId) {
+        newParams.set('subscriberId', data.subscriberId);
+      }
+      if (data.dateRange && data.dateRange !== DEFAULT_DATE_RANGE) {
+        newParams.set('dateRange', data.dateRange);
+      }
+
+      setSearchParams(newParams, { replace: true });
     },
-    [setSearchParams]
+    [activityItemId, setSearchParams]
   );
 
   const filters = useMemo(() => parseFilters(searchParams), [searchParams]);
