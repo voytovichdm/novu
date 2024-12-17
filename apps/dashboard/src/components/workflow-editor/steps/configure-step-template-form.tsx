@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo } from 'react';
 import merge from 'lodash.merge';
+import isEqual from 'lodash.isequal';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
@@ -18,6 +19,7 @@ import { Form } from '@/components/primitives/form/form';
 import { useFormAutosave } from '@/hooks/use-form-autosave';
 import { SaveFormContext } from '@/components/workflow-editor/steps/save-form-context';
 import { EmailTabs } from '@/components/workflow-editor/steps/email/email-tabs';
+import { CommonCustomControlValues } from './common/common-custom-control-values';
 
 const STEP_TYPE_TO_TEMPLATE_FORM: Record<StepTypeEnum, (args: StepEditorProps) => React.JSX.Element | null> = {
   [StepTypeEnum.EMAIL]: EmailTabs,
@@ -25,8 +27,8 @@ const STEP_TYPE_TO_TEMPLATE_FORM: Record<StepTypeEnum, (args: StepEditorProps) =
   [StepTypeEnum.IN_APP]: InAppTabs,
   [StepTypeEnum.SMS]: OtherStepTabs,
   [StepTypeEnum.PUSH]: OtherStepTabs,
-  [StepTypeEnum.DIGEST]: () => null,
-  [StepTypeEnum.DELAY]: () => null,
+  [StepTypeEnum.DIGEST]: CommonCustomControlValues,
+  [StepTypeEnum.DELAY]: CommonCustomControlValues,
   [StepTypeEnum.TRIGGER]: () => null,
   [StepTypeEnum.CUSTOM]: () => null,
 };
@@ -67,9 +69,12 @@ export const ConfigureStepTemplateForm = (props: ConfigureStepTemplateFormProps)
     previousData: defaultValues,
     form,
     save: (data) => {
+      const defaultValues = buildDefaultValuesOfDataSchema(step.controls.dataSchema ?? {});
+      const isDefaultValues = isEqual(data, defaultValues);
+      const updateData = isDefaultValues ? {} : data;
       // transform form fields to step update dto
       const updateStepData: Partial<StepUpdateDto> = {
-        controlValues: data,
+        controlValues: updateData,
       };
       update(updateStepInWorkflow(workflow, step.stepId, updateStepData));
     },
