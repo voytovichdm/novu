@@ -785,6 +785,9 @@ importers:
       '@types/js-cookie':
         specifier: ^3.0.6
         version: 3.0.6
+      '@types/lodash.isequal':
+        specifier: ^4.5.8
+        version: 4.5.8
       '@uiw/codemirror-extensions-langs':
         specifier: ^4.23.6
         version: 4.23.6(@codemirror/autocomplete@6.18.3(@codemirror/language@6.10.3)(@codemirror/state@6.4.1)(@codemirror/view@6.34.3)(@lezer/common@1.2.3))(@codemirror/language-data@6.5.1(@codemirror/view@6.34.3))(@codemirror/language@6.10.3)(@codemirror/legacy-modes@6.4.1)(@codemirror/state@6.4.1)(@codemirror/view@6.34.3)(@lezer/common@1.2.3)(@lezer/highlight@1.2.1)(@lezer/javascript@1.4.19)(@lezer/lr@1.4.2)
@@ -812,6 +815,9 @@ importers:
       cmdk:
         specifier: 1.0.0
         version: 1.0.0(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      cron-parser:
+        specifier: ^4.9.0
+        version: 4.9.0
       date-fns:
         specifier: ^4.1.0
         version: 4.1.0
@@ -909,9 +915,6 @@ importers:
       '@types/lodash.debounce':
         specifier: ^4.0.9
         version: 4.0.9
-      '@types/lodash.isequal':
-        specifier: ^4.5.8
-        version: 4.5.8
       '@types/lodash.merge':
         specifier: ^4.6.6
         version: 4.6.7
@@ -61344,7 +61347,7 @@ snapshots:
 
   bull@4.10.4:
     dependencies:
-      cron-parser: 4.8.1
+      cron-parser: 4.9.0
       debuglog: 1.0.1
       get-port: 5.1.1
       ioredis: 5.3.2
@@ -62545,10 +62548,11 @@ snapshots:
   cron-parser@4.8.1:
     dependencies:
       luxon: 3.3.0
+    optional: true
 
   cron-parser@4.9.0:
     dependencies:
-      luxon: 3.3.0
+      luxon: 3.4.4
 
   cron@3.1.7:
     dependencies:
