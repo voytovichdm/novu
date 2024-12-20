@@ -12,3 +12,15 @@ export type TableIntegration = {
   primary?: boolean;
   isPrimary?: boolean;
 };
+
+export type IntegrationFormData = {
+  name: string;
+  identifier: string;
+  active: boolean;
+  primary: boolean;
+  credentials: Record<string, any>;
+  check: boolean;
+  environmentId: string;
+};
+
+export type IntegrationStep = 'select' | 'configure';

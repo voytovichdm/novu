@@ -1,11 +1,26 @@
-import { IntegrationsList } from './components/integrations-list';
-import { DashboardLayout } from '../../components/dashboard-layout';
-import { Badge } from '../../components/primitives/badge';
+import { useCallback } from 'react';
+import { Outlet, useNavigate } from 'react-router-dom';
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/primitives/tabs';
 import { Button } from '@/components/primitives/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
+import { buildRoute, ROUTES } from '@/utils/routes';
+import { DashboardLayout } from '../components/dashboard-layout';
+import { TableIntegration } from '../components/integrations/types';
+import { Badge } from '../components/primitives/badge';
+import { IntegrationsList } from '../components/integrations/components/integrations-list';
 
 export function IntegrationsListPage() {
+  const navigate = useNavigate();
+
+  const onItemClick = function (item: TableIntegration) {
+    navigate(buildRoute(ROUTES.INTEGRATIONS_UPDATE, { integrationId: item.integrationId }));
+  };
+
+  const onAddIntegrationClickCallback = useCallback(() => {
+    navigate(ROUTES.INTEGRATIONS_CONNECT);
+  }, [navigate]);
+
   return (
     <DashboardLayout
       headerStartItems={
@@ -39,28 +54,18 @@ export function IntegrationsListPage() {
               </TooltipContent>
             </Tooltip>
           </TabsList>
-          <Button
-            size="sm"
-            variant="primary"
-            onClick={() => {
-              // Coming Soon
-            }}
-            className="my-1.5 mr-2.5"
-          >
+          <Button size="sm" variant="primary" onClick={onAddIntegrationClickCallback} className="my-1.5 mr-2.5">
             Connect Provider
           </Button>
         </div>
         <TabsContent value="providers" variant="regular" className="!mt-0 p-2.5">
-          <IntegrationsList
-            onRowClickCallback={() => {
-              // Coming Soon
-            }}
-          />
+          <IntegrationsList onItemClick={onItemClick} />
         </TabsContent>
         <TabsContent value="data-warehouse" variant="regular">
           <div className="text-muted-foreground flex h-64 items-center justify-center">Coming soon</div>
         </TabsContent>
       </Tabs>
+      <Outlet />
     </DashboardLayout>
   );
 }
