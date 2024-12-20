@@ -13,6 +13,7 @@ import {
   UsecaseSelectPage,
   ApiKeysPage,
   WelcomePage,
+  IntegrationsListPage,
   SettingsPage,
   ActivityFeed,
 } from '@/pages';
@@ -132,11 +133,16 @@ const router = createBrowserRouter([
                 path: ROUTES.TEST_WORKFLOW,
                 element: <TestWorkflowPage />,
               },
+
               {
                 path: '*',
                 element: <CatchAllRoute />,
               },
             ],
+          },
+          {
+            path: ROUTES.INTEGRATIONS,
+            element: <IntegrationsListPage />,
           },
           {
             path: ROUTES.SETTINGS,
