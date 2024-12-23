@@ -39,7 +39,7 @@ export const TestWorkflowLogsSidebar = ({ transactionId }: TestWorkflowLogsSideb
     );
 
     // Only stop refetching if we have an activity and it's not pending
-    setShouldRefetch(isPending);
+    setShouldRefetch(isPending || !activity?.jobs?.length);
 
     queryClient.invalidateQueries({
       queryKey: [QueryKeys.fetchActivity, currentEnvironment?._id, activity._id],
