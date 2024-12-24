@@ -49,5 +49,10 @@
   },
   "dependencies": {
     "@novu/react": "workspace:*"
+  },
+  "nx": {
+    "tags": [
+      "type:package"
+    ]
   }
 }
