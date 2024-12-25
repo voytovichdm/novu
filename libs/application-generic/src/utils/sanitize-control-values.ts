@@ -1,90 +1,82 @@
 import { StepTypeEnum, TimeUnitEnum } from '@novu/shared';
 import { isEmpty } from 'lodash';
-import { SmsControlType } from './schemas/sms-control.schema';
-import { ChatControlType } from './schemas/chat-control.schema';
-import { DelayControlType } from './schemas/delay-control.schema';
 import {
-  DigestControlSchemaType,
-  DigestRegularControlType,
-  DigestTimedControlType,
-  isDigestRegularControl,
+  InAppActionType,
+  InAppControlType,
+} from '../schemas/control/in-app-control.schema';
+import {
+  EmailControlType,
+  SmsControlType,
+  InAppRedirectType,
+  PushControlType,
   isDigestTimedControl,
-} from './schemas/digest-control.schema';
-import { PushControlType } from './schemas/push-control.schema';
-import { InAppControlType } from './schemas/in-app-control.schema';
-import { EmailControlType } from './schemas/email-control.schema';
+  DigestTimedControlType,
+  DigestControlSchemaType,
+  isDigestRegularControl,
+  DigestRegularControlType,
+  LookBackWindowType,
+  DelayControlType,
+  ChatControlType,
+} from '../schemas/control';
 
-const EMPTY_TIP_TAP_OBJECT = JSON.stringify({
-  type: 'doc',
-  content: [
-    {
-      type: 'paragraph',
-      attrs: { textAlign: 'left' },
-      content: [{ type: 'text', text: ' ' }],
-    },
-  ],
-});
-const WHITESPACE = ' ';
-
-type Redirect = {
-  url: string;
-  target: '_self' | '_blank' | '_parent' | '_top' | '_unfencedTop';
-};
-
-type Action = {
-  label?: string;
-  redirect?: Redirect;
-};
-
-type LookBackWindow = {
-  amount: number;
-  unit: string;
-};
-
-function sanitizeRedirect(redirect: Redirect | undefined) {
-  if (!redirect?.url || !redirect?.target) {
+export function sanitizeRedirect(redirect: InAppRedirectType | undefined) {
+  if (!redirect?.url || redirect.url.length === 0 || !redirect?.target) {
     return undefined;
   }
 
   return {
-    url: redirect.url || 'https://example.com',
-    target: redirect.target || '_self',
+    url: redirect.url as string,
+    target: redirect.target as
+      | '_self'
+      | '_blank'
+      | '_parent'
+      | '_top'
+      | '_unfencedTop',
   };
 }
 
-function sanitizeAction(action: Action) {
+function sanitizeAction(action: InAppActionType) {
   if (!action?.label) {
     return undefined;
   }
 
   return {
-    label: action.label,
-    redirect: sanitizeRedirect(action.redirect),
+    label: action.label as string,
+    redirect: sanitizeRedirect(action.redirect) as InAppRedirectType,
   };
 }
 
 function sanitizeInApp(controlValues: InAppControlType) {
   const normalized: InAppControlType = {
     subject: controlValues.subject || undefined,
-    body: isEmpty(controlValues.body) ? WHITESPACE : controlValues.body,
+    // Cast to string to trigger Ajv validation errors
+    body: isEmpty(controlValues.body)
+      ? (undefined as unknown as string)
+      : controlValues.body,
     avatar: controlValues.avatar || undefined,
-    primaryAction: null,
-    secondaryAction: null,
-    redirect: null,
+    primaryAction: undefined,
+    secondaryAction: undefined,
+    redirect: undefined,
     data: controlValues.data || undefined,
     skip: controlValues.skip || undefined,
   };
 
   if (controlValues.primaryAction) {
-    normalized.primaryAction = sanitizeAction(controlValues.primaryAction as Action);
+    normalized.primaryAction = sanitizeAction(
+      controlValues.primaryAction as InAppActionType,
+    );
   }
 
   if (controlValues.secondaryAction) {
-    normalized.secondaryAction = sanitizeAction(controlValues.secondaryAction as Action);
+    normalized.secondaryAction = sanitizeAction(
+      controlValues.secondaryAction as InAppActionType,
+    );
   }
 
   if (controlValues.redirect) {
-    normalized.redirect = sanitizeRedirect(controlValues.redirect as Redirect);
+    normalized.redirect = sanitizeRedirect(
+      controlValues.redirect as InAppRedirectType,
+    );
   }
 
   return filterNullishValues(normalized);
@@ -92,8 +84,8 @@ function sanitizeInApp(controlValues: InAppControlType) {
 
 function sanitizeEmail(controlValues: EmailControlType) {
   const emailControls: EmailControlType = {
-    subject: controlValues.subject || '',
-    body: controlValues.body || EMPTY_TIP_TAP_OBJECT,
+    subject: controlValues.subject,
+    body: controlValues.body,
     skip: controlValues.skip || undefined,
   };
 
@@ -147,8 +139,11 @@ function sanitizeDigest(controlValues: DigestControlSchemaType) {
       skip: controlValues.skip || undefined,
       lookBackWindow: controlValues.lookBackWindow
         ? {
-            amount: (controlValues.lookBackWindow as LookBackWindow).amount || 0,
-            unit: ((controlValues.lookBackWindow as LookBackWindow).unit as TimeUnitEnum) || TimeUnitEnum.SECONDS,
+            amount:
+              (controlValues.lookBackWindow as LookBackWindowType).amount || 0,
+            unit:
+              (controlValues.lookBackWindow as LookBackWindowType).unit ||
+              TimeUnitEnum.SECONDS,
           }
         : undefined,
     };
@@ -165,8 +160,11 @@ function sanitizeDigest(controlValues: DigestControlSchemaType) {
     skip: anyControlValues.skip || undefined,
     lookBackWindow: anyControlValues.lookBackWindow
       ? {
-          amount: (anyControlValues.lookBackWindow as LookBackWindow).amount || 0,
-          unit: ((anyControlValues.lookBackWindow as LookBackWindow).unit as TimeUnitEnum) || TimeUnitEnum.SECONDS,
+          amount:
+            (anyControlValues.lookBackWindow as LookBackWindowType).amount || 0,
+          unit:
+            (anyControlValues.lookBackWindow as LookBackWindowType).unit ||
+            TimeUnitEnum.SECONDS,
         }
       : undefined,
   });
@@ -185,7 +183,11 @@ function sanitizeDelay(controlValues: DelayControlType) {
 
 function filterNullishValues<T extends Record<string, unknown>>(obj: T): T {
   if (typeof obj === 'object' && obj !== null) {
-    return Object.fromEntries(Object.entries(obj).filter(([_, value]) => value !== null && value !== undefined)) as T;
+    return Object.fromEntries(
+      Object.entries(obj).filter(
+        ([_, value]) => value !== null && value !== undefined,
+      ),
+    ) as T;
   }
 
   return obj;
@@ -211,10 +213,10 @@ function filterNullishValues<T extends Record<string, unknown>>(obj: T): T {
  * }
  *
  */
-export function sanitizeControlValues(
+export function dashboardSanitizeControlValues(
   controlValues: Record<string, unknown>,
-  stepType: StepTypeEnum
-): Record<string, unknown> | null {
+  stepType: StepTypeEnum | unknown,
+): (Record<string, unknown> & { skip?: Record<string, unknown> }) | null {
   if (!controlValues) {
     return null;
   }
@@ -236,7 +238,9 @@ export function sanitizeControlValues(
       normalizedValues = sanitizeChat(controlValues as ChatControlType);
       break;
     case StepTypeEnum.DIGEST:
-      normalizedValues = sanitizeDigest(controlValues as DigestControlSchemaType);
+      normalizedValues = sanitizeDigest(
+        controlValues as DigestControlSchemaType,
+      );
       break;
     case StepTypeEnum.DELAY:
       normalizedValues = sanitizeDelay(controlValues as DelayControlType);
