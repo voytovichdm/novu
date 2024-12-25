@@ -1,6 +1,7 @@
 import { ReactNode, useMemo } from 'react';
 import {
   RiBarChartBoxLine,
+  RiChat1Line,
   RiGroup2Line,
   RiKey2Line,
   RiRouteFill,
@@ -21,6 +22,7 @@ import { SubscribersStayTunedModal } from './subscribers-stay-tuned-modal';
 import { SidebarContent } from '@/components/side-navigation/sidebar';
 import { NavigationLink } from './navigation-link';
 import { GettingStartedMenuItem } from './getting-started-menu-item';
+import * as Sentry from '@sentry/react';
 
 const NavigationGroup = ({ children, label }: { children: ReactNode; label?: string }) => {
   return (
@@ -42,6 +44,16 @@ export const SideNavigation = () => {
     switchEnvironment(environment?.slug);
   };
 
+  const showPlainLiveChat = () => {
+    track(TelemetryEvent.SHARE_FEEDBACK_LINK_CLICKED);
+
+    try {
+      window?.Plain?.open();
+    } catch (error) {
+      Sentry.captureException(error);
+      console.error('Error opening plain chat:', error);
+    }
+  };
   return (
     <aside className="bg-neutral-alpha-50 relative flex h-full w-[275px] flex-shrink-0 flex-col">
       <SidebarContent className="h-full">
@@ -105,10 +117,17 @@ export const SideNavigation = () => {
             <FreeTrialCard />
 
             <NavigationGroup>
+              <button onClick={showPlainLiveChat} className="w-full">
+                <NavigationLink>
+                  <RiChat1Line className="size-4" />
+                  <span>Share Feedback</span>
+                </NavigationLink>
+              </button>
               <NavigationLink to={ROUTES.SETTINGS_TEAM}>
                 <RiUserAddLine className="size-4" />
                 <span>Invite teammates</span>
               </NavigationLink>
+
               <GettingStartedMenuItem />
             </NavigationGroup>
           </div>
