@@ -171,7 +171,6 @@ export const CustomerSupportButton = () => {
   const showPlainLiveChat = () => {
     if (isLiveChatVisible) {
       try {
-        console.log('Opening plain chat', window?.Plain);
         window?.Plain?.open();
       } catch (error) {
         console.error('Error opening plain chat: ', error);
