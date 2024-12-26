@@ -28,7 +28,7 @@ const CONSTANTS = {
   CARD_OFFSET: 10,
   SCALE_FACTOR: 0.06,
   MAX_DISMISSED_IDS: 15,
-  MONTHS_TO_SHOW: 2,
+  MONTHS_TO_SHOW: 12,
 } as const;
 
 export function ChangelogStack() {
@@ -95,8 +95,8 @@ export function ChangelogStack() {
   }
 
   return (
-    <div className="absolute bottom-10 w-full">
-      <div className="m-full relative mb-4 h-[190px]">
+    <div className="mb-2 w-full">
+      <div className="m-full relative h-[175px]">
         {changelogs.map((changelog, index) => (
           <ChangelogCard
             key={changelog.id}
