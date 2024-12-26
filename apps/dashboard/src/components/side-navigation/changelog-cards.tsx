@@ -28,7 +28,7 @@ const CONSTANTS = {
   CARD_OFFSET: 10,
   SCALE_FACTOR: 0.06,
   MAX_DISMISSED_IDS: 15,
-  MONTHS_TO_SHOW: 12,
+  MONTHS_TO_SHOW: 2,
 } as const;
 
 export function ChangelogStack() {
