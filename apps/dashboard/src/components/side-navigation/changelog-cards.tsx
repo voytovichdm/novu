@@ -90,6 +90,10 @@ export function ChangelogStack() {
     setChangelogs((prev) => prev.filter((log) => log.id !== changelog.id));
   };
 
+  if (!changelogs.length) {
+    return null;
+  }
+
   return (
     <div className="absolute bottom-10 w-full">
       <div className="m-full relative mb-4 h-[190px]">
